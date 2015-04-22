@@ -23,7 +23,7 @@
 %	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
 %----------------------------------------------------------------------------------------
 
-\documentclass[a4paper, 11pt]{article} % Font size (can be 10pt, 11pt or 12pt) and paper size (remove a4paper for US letter paper)
+\documentclass[a4paper, 10pt]{article} % Font size (can be 10pt, 11pt or 12pt) and paper size (remove a4paper for US letter paper)
 
 \usepackage[protrusion=true,expansion=true]{microtype} % Better typography
 \usepackage{graphicx} % Required for including pictures
@@ -32,6 +32,16 @@
 \usepackage[utf8]{inputenc}
 \usepackage{enumerate}
 \usepackage{enumitem}
+
+\usepackage{geometry}
+ \geometry{
+ a4paper,
+ total={210mm,297mm},
+ left=3cm,
+ right=3cm,
+ top=25mm,
+ bottom=25mm,
+ }
 
 % Imagenes
 \usepackage{graphicx} 
@@ -58,10 +68,16 @@
 \usepackage{multicol}
 \newsavebox\ltmcbox
 
-% S�mbolos matem�ticos
+% Símbolos matemáticos
 \usepackage{amssymb}
 \let\oldemptyset\emptyset
 \let\emptyset\varnothing
+
+% Fuente Arial
+\renewcommand{\rmdefault}{phv} % Arial
+\renewcommand{\sfdefault}{phv} % Arial
+
+
 
 %URL's 
 \usepackage{url}
@@ -110,8 +126,50 @@
 \tableofcontents
 \pagebreak
 
+\section{Resumen}
+
+Un resumen de entre 5 y 15 líneas del trabajo. 
+
+
+Links en Windows. 
+http://en.wikipedia.org/wiki/Shared_web_hosting_service
+http://es.wikipedia.org/wiki/Server_Name_Indication
+http://blog.arkabytes.com/linux/servidor-casero-servidor-web-apache/
+http://httpd.apache.org/docs/2.4/en/vhosts/name-based.html
+http://httpd.apache.org/docs/2.4/vhosts/examples.html
+
+\section{Memoria}
+
+Memoria. 
+
 \section{Introducción}
 
-Una introducción al tema. 
+Una introducción al tema. Máximo, 2 páginas. Hablaremos de Virtual Hosting y Apache. 
+
+\subsection{Virtual Hosting}
+
+El concepto de Virtual Hosting se refiere al método para alojar múltiples dominios en un único servidor, lo que permite a dicho servidor compartir su funcionalidad entre los distintos dominios, como por ejemplo la memoria o el procesador. 
+
+\subsection{Apache}
+
+Hablar de Apache. 
+
+\section{Trabajo}
+
+¿Cómo configurar Apache para poder hacer hosting virtual? 
+
+Mirar la documentación de apache, http://httpd.apache.org/docs/2.4/en/vhosts/name-based.html
+
+Podemos hablar de la configuración de apache en general y luego centrarnos en el hosting virtual. Hablar de qué hay que tocar en los archivos de configuración puede ser buena idea, y quizás hacer alguna prueba en local. (Puede valer como inicio de la presentación?) 
+
+Diferenciación entre basados en nombre y basados en IP. 
+	- Definición de cada uno de ellos
+	- Cómo los trata apache. 
+	- Ejemplos de cada uno, abordando todas las posibilidades. 
+
+Hablar de la seguridad en apache y como afecta al virtual hosting en particular. Proponer soluciones para problemas que se puedan dar. 
+
+Permitir multiples sitios seguros: Server Name Indication 
+
 
 \end{document}
