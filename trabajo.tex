@@ -128,7 +128,6 @@
 
 \section{Resumen}
 
-Un resumen de entre 5 y 15 líneas del trabajo. 
 En este trabajo vamos a tratar sobre el hosting virtual y su implementación en un servidor apache. Inicialmente presentaremos el concepto de hosting virtual y sus diferentes opciones y usos, continuando con el servidor apache, del cual trataremos los conceptos básicos y enlazaremos con el hosting virtual. Analizaremos y comprobaremos las diferentes opciones que nos ofrece apache para ofrecer este tipo de servicio, explicando las alternativas y las ventajas que nos ofrece cada una de ellas. Trataremos también distintos aspectos a tener en cuenta a la hora de usar hosting virtual en un servidor, tales como la seguridad, y veremos qué opciones nos permite apache para configurar dichos aspectos. 
 
 \section{Memoria}
@@ -145,10 +144,12 @@ El concepto de Virtual Hosting se refiere al método para alojar múltiples domi
 
 Existen distintos tipos de hosting virtual, de los cuales destacan dos: basado en nombre (name-based) y en IP (IP-based), aunque también existe una versión basada en puertos(port-based), si bien es más extraña. Vamos a hablar un poco de ellas en detalle: 
 
-Name-based: Esta opción almacena hosts con distintos nombre pero que comparten la misma IP. De esta forma, podríamos tener dos páginas, www.ejemplo.com y www.ejemplo.org compartiendo IP pero distintas entre sí (y con almacenamientos distintos). En esta opción se nos presenta un problema con las DNS de los sitios web. 
+Name-based: Esta opción almacena hosts con distintos nombre pero que comparten la misma IP. De esta forma, podríamos tener dos páginas, www.ejemplo.com y www.ejemplo.org compartiendo IP pero distintas entre sí (y con almacenamientos distintos). En esta opción se nos presenta un problema con las DNS, ya que si estas no funcionan debidamente resulta imposible acceder a la página web, aun conociendo la IP. Por norma general, si intentamos acceder directamente mediante la IP el servidor responderá con una página web por defecto, que usualmente no es a la que el usuario quiere accerder. \\
 Existen ciertos problemas de seguridad con esta opción, pero los debatiremos más adelante. 
 
-IP-based: 
+IP-based: En esta opción cada página web tendrá una IP única para sí misma. Es menos problemático en cuanto al acceso, pues cada web es distinta a las demás y se gestiona por separado, aunque aumenta un poco la carga del servidor, que tiene que escuchar distintas IP's, si bien esto no es significativo en gran medida. 
+
+Estas dos técnicas pueden ser combinadas dentro de un servidor, no teniendo que restringirse únicamente a una de las dos. 
 
 \subsection{Apache}
 
