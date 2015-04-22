@@ -129,32 +129,37 @@
 \section{Resumen}
 
 Un resumen de entre 5 y 15 líneas del trabajo. 
-
-
-Links en Windows. 
-http://en.wikipedia.org/wiki/Shared_web_hosting_service
-http://es.wikipedia.org/wiki/Server_Name_Indication
-http://blog.arkabytes.com/linux/servidor-casero-servidor-web-apache/
-http://httpd.apache.org/docs/2.4/en/vhosts/name-based.html
-http://httpd.apache.org/docs/2.4/vhosts/examples.html
+En este trabajo vamos a tratar sobre el hosting virtual y su implementación en un servidor apache. Inicialmente presentaremos el concepto de hosting virtual y sus diferentes opciones y usos, continuando con el servidor apache, del cual trataremos los conceptos básicos y enlazaremos con el hosting virtual. Analizaremos y comprobaremos las diferentes opciones que nos ofrece apache para ofrecer este tipo de servicio, explicando las alternativas y las ventajas que nos ofrece cada una de ellas. Trataremos también distintos aspectos a tener en cuenta a la hora de usar hosting virtual en un servidor, tales como la seguridad, y veremos qué opciones nos permite apache para configurar dichos aspectos. 
 
 \section{Memoria}
 
 Memoria. 
 
-\section{Introducción}
+\subsection{Introducción}
 
 Una introducción al tema. Máximo, 2 páginas. Hablaremos de Virtual Hosting y Apache. 
 
 \subsection{Virtual Hosting}
 
-El concepto de Virtual Hosting se refiere al método para alojar múltiples dominios en un único servidor, lo que permite a dicho servidor compartir su funcionalidad entre los distintos dominios, como por ejemplo la memoria o el procesador. 
+El concepto de Virtual Hosting se refiere al método para alojar múltiples dominios en un único servidor, lo que permite a dicho servidor compartir su funcionalidad entre los distintos dominios, como por ejemplo la memoria o el procesador. Uno de sus principales usos es el almacenamiento web compartido, un servicio donde cada sitio web ocupa una parte del servidor, que está contectado a internet. Es la forma de almacenamiento más económica, pues permite a todo aquel que quiera tener una página web alojarla a un precio mucho más barato ya que se reparten los gastos de mantenimiento y alquiler del servidor entre todos los usuarios. 
+
+Existen distintos tipos de hosting virtual, de los cuales destacan dos: basado en nombre (name-based) y en IP (IP-based), aunque también existe una versión basada en puertos(port-based), si bien es más extraña. Vamos a hablar un poco de ellas en detalle: 
+
+Name-based: Esta opción almacena hosts con distintos nombre pero que comparten la misma IP. De esta forma, podríamos tener dos páginas, www.ejemplo.com y www.ejemplo.org compartiendo IP pero distintas entre sí (y con almacenamientos distintos). En esta opción se nos presenta un problema con las DNS de los sitios web. 
+Existen ciertos problemas de seguridad con esta opción, pero los debatiremos más adelante. 
+
+IP-based: 
 
 \subsection{Apache}
 
-Hablar de Apache. 
+Hablar de Apache.
 
-\section{Trabajo}
+Apache es un servidor web HTTP de código abierto, siendo actualmente el más utilizado en todo el mundo.\footnote{Podemos ver estadísticas de uso en \url{http://news.netcraft.com/archives/2015/04/20/april-2015-web-server-survey.html\#more-18965}} Actualmente se encuentra en su versión 2.4.12.
+
+Configuración de apache. He cambiado la dirección de correo donde quiero que se me envíen las notificaciones. 
+
+
+\subsection{Trabajo}
 
 ¿Cómo configurar Apache para poder hacer hosting virtual? 
 
