@@ -130,46 +130,59 @@
 
 En este trabajo vamos a tratar sobre el hosting virtual y su implementación en un servidor apache. Inicialmente presentaremos el concepto de hosting virtual y sus diferentes opciones y usos, continuando con el servidor apache, del cual trataremos los conceptos básicos y enlazaremos con el hosting virtual. Analizaremos y comprobaremos las diferentes opciones que nos ofrece apache para ofrecer este tipo de servicio, explicando las alternativas y las ventajas que nos ofrece cada una de ellas. Trataremos también distintos aspectos a tener en cuenta a la hora de usar hosting virtual en un servidor, tales como la seguridad, y veremos qué opciones nos permite apache para configurar dichos aspectos. 
 
-\section{Memoria}
 
-Memoria. 
-
-\subsection{Introducción}
+\section{Introducción}
 
 Una introducción al tema. Máximo, 2 páginas. Hablaremos de Virtual Hosting y Apache. 
 
 \subsection{Virtual Hosting}
 
-El concepto de Virtual Hosting se refiere al método para alojar múltiples dominios en un único servidor, lo que permite a dicho servidor compartir su funcionalidad entre los distintos dominios, como por ejemplo la memoria o el procesador. Uno de sus principales usos es el almacenamiento web compartido, un servicio donde cada sitio web ocupa una parte del servidor, que está contectado a internet. Es la forma de almacenamiento más económica, pues permite a todo aquel que quiera tener una página web alojarla a un precio mucho más barato ya que se reparten los gastos de mantenimiento y alquiler del servidor entre todos los usuarios. 
+El concepto de Virtual Hosting se refiere al método para alojar múltiples dominios en un único servidor, lo que permite a dicho servidor compartir su funcionalidad entre los distintos dominios, como por ejemplo la memoria o el procesador. Uno de sus principales usos es el almacenamiento web compartido, un servicio donde cada sitio web ocupa una parte del servidor, que está contectado a internet. Es la forma de almacenamiento más económica, pues permite a todo aquel que quiera tener una página web alojarla a un precio mucho más barato que si tuviera que alquilar un servidor completo, ya que se reparten los gastos de mantenimiento y alquiler del servidor entre todos los usuarios. 
 
-Existen distintos tipos de hosting virtual, de los cuales destacan dos: basado en nombre (name-based) y en IP (IP-based), aunque también existe una versión basada en puertos(port-based), si bien es más extraña. Vamos a hablar un poco de ellas en detalle: 
+Gracias a esto también se permite un mayor aprovechamiento de los servidores, los cuales tienen cada vez más capacidad de cómputo y podrían quedar desaprovechados si únicamente alojasen una web. 
 
-Name-based: Esta opción almacena hosts con distintos nombre pero que comparten la misma IP. De esta forma, podríamos tener dos páginas, www.ejemplo.com y www.ejemplo.org compartiendo IP pero distintas entre sí (y con almacenamientos distintos). En esta opción se nos presenta un problema con las DNS, ya que si estas no funcionan debidamente resulta imposible acceder a la página web, aun conociendo la IP. Por norma general, si intentamos acceder directamente mediante la IP el servidor responderá con una página web por defecto, que usualmente no es a la que el usuario quiere accerder. \\
-Existen ciertos problemas de seguridad con esta opción, pero los debatiremos más adelante. 
+Sin embargo, no son todo ventajas en el hosting virtual. Debido al alojamiento compartido, es común que aparezcan fallos de seguridad, normalmente debidos a que el servidor tiene múltiples administradores independientes que trabajan con herramientas distintas, creando dificultades en el mantenimiento de los programas que se ejecutan en el servidor. Además, a causa del reparto de recursos, se crea una dependencia con los compañeros de servidor, ya que estos pueden sobrecargarlo, provocando una bajada en el rendimiento de nuestra propia web. En general, podemos decir que estamos fuertemente condicionados por lo que nuestros vecinos hagan en el servidor, tanto en materia de seguridad como de recursos. 
 
-IP-based: En esta opción cada página web tendrá una IP única para sí misma. Es menos problemático en cuanto al acceso, pues cada web es distinta a las demás y se gestiona por separado, aunque aumenta un poco la carga del servidor, que tiene que escuchar distintas IP's, si bien esto no es significativo en gran medida. 
+Centrándonos ahora en el hosting virtual, tenemos distintos tipos a diferenciar, de los cuales destacan dos: basado en nombre (name-based) y en IP (IP-based), aunque también existe una versión basada en puertos(port-based), si bien es más extraña. Vamos a hablar un poco de ellas en detalle: 
+
+\underline{Name-based:} Esta opción almacena hosts con distintos nombre pero que comparten la misma IP. De esta forma, podríamos tener dos páginas, www.ejemplo.com y www.ejemplo.org compartiendo IP pero distintas entre sí (y con almacenamientos distintos). En esta opción se nos presenta un problema con las DNS, ya que si estas no funcionan debidamente resulta imposible acceder a la página web, aun conociendo la IP. Por norma general, si intentamos acceder directamente mediante la IP el servidor responderá con una página web por defecto, que usualmente no es a la que el usuario quiere acceder. \\
+Existen ciertos problemas de seguridad adicionales si utilizamos este tipo de alojamiento, pero los trataremos más adelante. 
+
+\underline{IP-based:} En esta opción cada página web tendrá una IP única para sí misma. Es menos problemático en cuanto al acceso, pues cada web es distinta a las demás y se gestiona por separado, aunque aumenta un poco la carga del servidor, que tiene que escuchar distintas IP's, si bien esto no es significativo en gran medida. 
 
 Estas dos técnicas pueden ser combinadas dentro de un servidor, no teniendo que restringirse únicamente a una de las dos. 
 
 \subsection{Apache}
 
-Hablar de Apache.
+El servidor Apache\footnote{Para acortar, nos referiremos a él como 'Apache'.} es un servidor web HTTP de código abierto, siendo actualmente el más utilizado en todo el mundo.\footnote{Podemos ver estadísticas de uso en \url{http://news.netcraft.com/archives/2015/04/20/april-2015-web-server-survey.html\#more-18965}} Actualmente se encuentra en su versión 2.4.12. 
 
-Apache es un servidor web HTTP de código abierto, siendo actualmente el más utilizado en todo el mundo.\footnote{Podemos ver estadísticas de uso en \url{http://news.netcraft.com/archives/2015/04/20/april-2015-web-server-survey.html\#more-18965}} Actualmente se encuentra en su versión 2.4.12.
+Apache es un producto de la Apache Software Fundation, que se inició en el año 1995. La propia fundación lo presenta de la siguiente forma: \textit{'El servidor HTTP Apache es un servidor HTTP de código abierto para sistemas operativos modernos, incluyendo UNIX, Microsoft Windows, Mac OS/X y Netware. El objetivo de este proyecto es el de proveer un servidor seguro, eficiente y extensible que proporciona servicio HTTP de acuerdo a los estándares HTTP actuales. Apache ha sido el servidor web más popular en internet desde Abril de 1996.'}\footnote{http://httpd.apache.org/}
 
-Configuración de apache. He cambiado la dirección de correo donde quiero que se me envíen las notificaciones. 
+En el desarrollo de este trabajo trabajaremos con Apache instalado en Ubuntu 14.04. Para instalarlo, únicamente tenemos que ejecutar la orden 'sudo apt-get install apache2'. En caso de tener otro gestor de paquetes distinto a apt, el proceso a seguir es el mismo, con la orden correspondiente para dicho gestor y el paquete apache2. Para Windows, tenemos distintas aplicaciones que nos permiten usar Apache, tales como Apache Haus o WampServer, el cual incluye también MySQL y PHP, proporcionando lo conocido como WAMP: Windows, Apache, MySQL y PHP. En mi caso, al trabajar en Ubuntu, tengo instalado LAMP, si bien puede que no sea necesaria toda su funcionalidad en el desarrollo del trabajo. 
 
 
-\subsection{Trabajo}
+\section{Trabajo}
+
+La parte importante del trabajo. Virtual Hosting en Apache. 
+
+\subsection{Configuración de Apache}
+
+En este apartado vamos a hablar de la configuración de Apache en Ubuntu, inicialmente de forma general y después centrada en la configuración necesaria para proporcionar un servicio de hosting virtual. 
+
+Al instalar apache, 
+
 
 ¿Cómo configurar Apache para poder hacer hosting virtual? 
 
+Configuración de apache en general, después nos enfocamos al hosting virtual. 
+
+Configuración de apache. He cambiado la dirección de correo donde quiero que se me envíen las notificaciones.
+
 Mirar la documentación de apache, http://httpd.apache.org/docs/2.4/en/vhosts/name-based.html
 
-Podemos hablar de la configuración de apache en general y luego centrarnos en el hosting virtual. Hablar de qué hay que tocar en los archivos de configuración puede ser buena idea, y quizás hacer alguna prueba en local. (Puede valer como inicio de la presentación?) 
+Hablar de qué hay que tocar en los archivos de configuración puede ser buena idea, y quizás hacer alguna prueba en local. 
 
 Diferenciación entre basados en nombre y basados en IP. 
-	- Definición de cada uno de ellos
 	- Cómo los trata apache. 
 	- Ejemplos de cada uno, abordando todas las posibilidades. 
 
@@ -177,5 +190,9 @@ Hablar de la seguridad en apache y como afecta al virtual hosting en particular.
 
 Permitir multiples sitios seguros: Server Name Indication 
 
+\section{Aparte. Ideas para la presentación. Preguntas.}
+\begin{itemize}
+\item Tipos de hosting virtual. Tanto para presentación como para preguntas. 
+\end{itemize}
 
 \end{document}
