@@ -169,7 +169,7 @@ En el desarrollo de este trabajo trabajaremos con Apache instalado en Ubuntu 14.
 
 La parte importante del trabajo. Virtual Hosting en Apache. Comentar que no se pueden hacer experimentos a gran escala pues conllevaría alquilar un servidor, crear una web y monitorizarla. 
 
-\subsection{Configuración de Apache}
+\subsection{Configuración general de Apache}
 
 En este apartado vamos a hablar de la configuración de Apache en Ubuntu, inicialmente de forma general y después centrada en la configuración necesaria para proporcionar un servicio de hosting virtual. 
 
@@ -179,7 +179,7 @@ El archivo principal de configuración es apache2.conf. Aquí tendremos la confi
 
 Para la configuración de los puertos de escucha, tenemos un archivo inicial que es ports.conf. Su formato es muy sencillo, simplemente hemos de indicarle los puertos que queremos escuchar con la línea 'Listen X', donde X es el número de puerto. Por defecto se escucha al puerto 80, y si tenemos posibilidad de conexión segura mediante SSL se escucha también el puerto 443 (para conexiones HTTPS). Si quisiéramos añadir más puertos podemos hacerlo añadiendo manualmente la línea indicada anteriormente. 
 
-\subsubsection{Configuración enfocada al hosting virtual}
+\subsection{Configuración enfocada al hosting virtual}
 
 La carpeta sites-enabled tendrá mucha importancia para nosotros. Dentro de esta, se encuentra el archivo de configuración 000-default.conf, que nos permite definir las páginas web que tendremos. Por defecto únicamente tenemos una entrada, que escuchará un host virtual. Está especificado de la siguiente forma: 
 
@@ -190,20 +190,17 @@ La carpeta sites-enabled tendrá mucha importancia para nosotros. Dentro de esta
 </VirtualHost>\\
 
 Al declarar el nuevo host, le indicaremos la IP y el puerto o puertos en los que escucha. En este caso estamos diciendo que cualquier IP es válida, y que escuche al puerto 80. Sin embargo, esto no hace que el servidor redirija toda petición a la carpeta. Podemos ver el siguiente mensaje que aparece al iniciar el servicio apache: \\
-'apache2: Could not reliably determine the server's fully qualified domain name, using 127.0.1.1. Set the 'ServerName' directive globally to suppress this message'\\
-Este mensaje nos dice que, al no haber determinado un nombre para el servidor (pues tenemos la línea ServerName comentada, que es la que se encarga de hacerlo), solo se tendrán en consideración las peticiones hechas a la IP 127.0.1.1. 
+\textit{'apache2: Could not reliably determine the server's fully qualified domain name, using 127.0.1.1. Set the 'ServerName' directive globally to suppress this message'}
+
+Este mensaje nos dice que, al no haber determinado un nombre para el servidor (pues tenemos la línea ServerName comentada, que es la que se encarga de hacerlo), solo se tendrán en consideración las peticiones hechas a la IP 127.0.1.1. La línea DocumentRoot nos indica el directorio raíz que almacenará los archivos para nuestra página web. Tenemos más opciones de configuración que podemos añadir aquí, tales como el correo del administrador del servidor, para el que usaremos la orden ServerAdmin dirección-de-correo y para el tratamiento de errores, ErrorLog y CustomLog. Como no son relevantes para este trabajo, no profundizaremos en ellos. 
 
 ¿Qué hemos de hacer si queremos añadir nuevos hosts virtuales? 
 
+Cada host virtual que queramos añadir quedará determinado en el archivo de configuración 000-default.conf de la carpeta sites-enabled, que especifica las webs que estaremos utilizando. Por normal general, cada nuevo host que añadamos tendrá su configuración entre las líneas <VirtualHost IP:Port> y </VirtualHost>. Dicha configuración dependerá del tipo de hosting virtual que queramos (IP-based o Name-based), por lo que distinguiremos entre ambos casos y los analizaremos con profundidad. 
 
+\subsubsection{IP-based}
 
-¿Cómo configurar Apache para poder hacer hosting virtual? 
-
-Configuración de apache en general, después nos enfocamos al hosting virtual. 
-
-Configuración de apache. He cambiado la dirección de correo donde quiero que se me envíen las notificaciones.
-
-Mirar la documentación de apache, http://httpd.apache.org/docs/2.4/en/vhosts/name-based.html
+Si queremos tener almacenamiento compartido basado en IP, la combinación IP-Puerto de cada host virtual debe ser diferente. Como se comenta en la documentación de Apache\footnote{\url{http://httpd.apache.org/docs/2.4/en/vhosts/ip-based.html}}, \textit{'en terminología del servidor HTTP Apache, usar una única IP con múltiples puertos TCP está considerado hosting virtual basado en IP.'}
 
 Hablar de qué hay que tocar en los archivos de configuración puede ser buena idea, y quizás hacer alguna prueba en local. 
 
