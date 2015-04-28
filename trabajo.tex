@@ -133,9 +133,15 @@
 En este trabajo vamos a tratar sobre el hosting virtual y su implementación en un servidor apache. Inicialmente presentaremos el concepto de hosting virtual y sus diferentes opciones y usos, continuando con el servidor apache, del cual trataremos los conceptos básicos y enlazaremos con el hosting virtual. Analizaremos y comprobaremos las diferentes opciones que nos ofrece apache para ofrecer este tipo de servicio, explicando las alternativas y las ventajas que nos ofrece cada una de ellas. Trataremos también distintos aspectos a tener en cuenta a la hora de usar hosting virtual en un servidor, tales como la seguridad, y veremos qué opciones nos permite apache para configurar dichos aspectos. 
 
 
-\section{Introducción}
+\section{Memoria}
 
-Una introducción al tema. Máximo, 2 páginas. Hablaremos de Virtual Hosting y Apache. 
+\subsection{Introducción}
+
+El alojamiento de contenido en internet ha ido evolucionando a lo largo de los años. Inicialmente se tenían estaciones de trabajo, que había que gestionar y mantener desde el mismo lugar en el que estaban. Para tener un sitio web propio había que tener un ordenador o un servidor que alojase y sirviera la página, ya que el negocio del alojamiento web no estaba todavía explotado. Poco a poco, las estaciones de trabajo fueron creciendo en tamaño, llegando así los datacenters, que introdujeron ciertas ventajas, como la seguridad física de la infraestructura. Este tipo de almacenamiento se sigue usando hoy en día, sobre todo por grandes compañías que requieren tener almacenada una cantidad de información masiva, como por ejemplo Google (ver [1] para más información). Al aumentar la capacidad de almacenamiento y procesamiento de los servidores, el uso de estos como una nueva forma de negocio fue instaurándose en el mundo de la informática; empiezan a surgir empresas que alquilan recursos a aquellas personas que quieren tener su propia página web sin necesidad de que tengan que montar la estructura en casa, lo que les ahorra trabajo, mantenimiento y una cantidad de dinero considerable. 
+
+Después del boom que supusieron los datacenters, estos pronto empezaron a tener un tamaño descomunal, complicando su mantenimiento e incluso almacenamiento, pues estos se encontraban en lugares gigantescos. Así, poco a poco, la virtualización fue abriendose paso como tecnología emergente. La virtualización ofrece una capa de abstracción entre software y hardware, proporcionando beneficios tales como el aislamiento entre aplicaciones, un mayor aprovechamiento del hardware disponible y una mejora del mantenimiento. Aquí entra en juego el término 'Virtual Hosting', en castellano 'almacenamiento virtual', que tratará sobre las diferentes posibilidades de almacenamiento web en estos servidores virtuales. 
+
+Sin embargo esta tecnología también vería aparecer los mismos problemas que sus predecesoras, estando atadas a un almacenamiento en un lugar físico. Es aquí donde aparece el denominado 'Cloud Computing' o almacenamiento en la nube. Su presencia en este sector ha ido aumentando a pasos agigantados, apoyada gracias al uso que le han dado grandes compañías como Amazon, Google y Microsoft. 
 
 \subsection{Virtual Hosting}
 
@@ -165,11 +171,11 @@ Apache es un producto de la Apache Software Fundation, que se inició en el año
 En el desarrollo de este trabajo trabajaremos con Apache instalado en Ubuntu 14.04. Para instalarlo, únicamente tenemos que ejecutar la orden 'sudo apt-get install apache2'. En caso de tener otro gestor de paquetes distinto a apt, el proceso a seguir es el mismo, con la orden correspondiente para dicho gestor y el paquete apache2. Para Windows, tenemos distintas aplicaciones que nos permiten usar Apache, tales como Apache Haus o WampServer, el cual incluye también MySQL y PHP, proporcionando lo conocido como WAMP: Windows, Apache, MySQL y PHP. En mi caso, al trabajar en Ubuntu, tengo instalado LAMP, si bien puede que no sea necesaria toda su funcionalidad en el desarrollo del trabajo. 
 
 
-\section{Trabajo}
-
-La parte importante del trabajo. Virtual Hosting en Apache. Comentar que no se pueden hacer experimentos a gran escala pues conllevaría alquilar un servidor, crear una web y monitorizarla. 
-
 \subsection{Configuración general de Apache}
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+%La parte importante del trabajo. Virtual Hosting en Apache. Comentar que no se pueden hacer experimentos a gran escala pues conllevaría alquilar un servidor, crear una web y monitorizarla. 
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 
 En este apartado vamos a hablar de la configuración de Apache en Ubuntu, inicialmente de forma general y después centrada en la configuración necesaria para proporcionar un servicio de hosting virtual. 
 
@@ -211,6 +217,10 @@ Diferenciación entre basados en nombre y basados en IP.
 Hablar de la seguridad en apache y como afecta al virtual hosting en particular. Proponer soluciones para problemas que se puedan dar. 
 
 Permitir multiples sitios seguros: Server Name Indication 
+
+\section{Bibliografía}
+
+[1] Centros de datos de Google - \url{http://www.google.com/about/datacenters/}
 
 \section{Aparte. Ideas para la presentación. Preguntas.}
 \begin{itemize}
