@@ -199,7 +199,7 @@ Para la configuración de los puertos de escucha, tenemos un archivo inicial que
 
 \subsection{Configuración enfocada al hosting virtual}
 
-La carpeta sites-enabled tendrá mucha importancia para nosotros. Dentro de esta, se encuentra el archivo de configuración 000-default.conf, que nos permite definir las páginas web que tendremos. Por defecto únicamente tenemos una entrada, que escuchará un host virtual. Está especificado de la siguiente forma: 
+La carpeta sites-enabled tendrá mucha importancia para nosotros. Dentro de esta, se encuentra el archivo de configuración 000-default.conf, que nos permite definir los hosts virtuales que tendremos. En mi caso, he creado varios archivos de configuración, uno para cada propósito, usando este como plantilla. Por defecto únicamente tenemos una entrada, que escuchará un host virtual. Está especificado de la siguiente forma: 
 
 <VirtualHost *:80> \\
 	\# ServerName www.example.com\\
@@ -216,29 +216,27 @@ La línea DocumentRoot nos indica el directorio raíz que almacenará los archiv
 
 \textbf{¿Qué hemos de hacer si queremos añadir nuevos hosts virtuales?}
 
-
-
-Cada host virtual que queramos añadir quedará determinado en el archivo de configuración 000-default.conf de la carpeta sites-enabled, que especifica las webs que estaremos utilizando. Por normal general, cada nuevo host que añadamos tendrá su configuración entre las líneas <VirtualHost IP:Port> y </VirtualHost>. Dicha configuración dependerá del tipo de hosting virtual que queramos (IP-based o Name-based), por lo que distinguiremos entre ambos casos y los analizaremos con profundidad. 
+Cada host virtual que queramos añadir quedará determinado en el archivo de configuración 000-default.conf de la carpeta sites-enabled, que especifica las webs que estaremos utilizando. Por normal general, cada nuevo host que añadamos tendrá su configuración entre las líneas <VirtualHost IP:Port>\ y </VirtualHost>. Dicha configuración dependerá del tipo de hosting virtual que queramos (IP-based o Name-based), por lo que distinguiremos entre ambos casos y los analizaremos con detalle. 
 
 Siempre será necesario conocer la nuestra IP para configurar los hosts virtuales en base a ella. 
 
 \subsubsection{Name-based}
 
-Vamos a ver la configuración necesaria para poder servir distintos sitios web usando una política basada en nombre. En primer lugar, necesitaremos definir los hosts virtuales mediante el uso de la directiva NameVirtualHost, indicándole la IP que vamos a utilizar. Por ejemplo, si nuestra IP es 200.200.200.200, al principio del archivo de configuración usaremos 
+Vamos a ver la configuración necesaria para poder servir distintos sitios web usando una política basada en nombre. En primer lugar, necesitaremos definir los hosts virtuales mediante el uso de la directiva NameVirtualHost, indicándole la IP que vamos a utilizar. Por ejemplo, si nuestra IP es 200.200.200.200, al principio del archivo de configuración tendremo que incluir la línea:
 
 NameVirtualHost 200.200.200.200:80\footnote{El puerto 80 es un ejemplo del puerto a usar. Podemos configurar cualquier otro o permitirlos todos con *}
 
-A partir de aquí, usaremos la directiva <VirtualHost> para declarar todos los hosts virtuales asociados a la IP. La IP que incluyamos en la declaración debe conicidir con la que hayamos definido en NameVirtualHost. En nuestro caso deberíamos usar 
+A partir de aquí, usaremos la directiva <VirtualHost>\ para declarar todos los hosts virtuales asociados a la IP. La IP que incluyamos en la declaración debe conicidir con la que hayamos definido en NameVirtualHost. En nuestro caso deberíamos usar 
 
 <VirtualHost 200.200.200.200:80>
 
-Dentro de la directiva VirtualHost declararemos todo lo que sea necesario, aunque obligatoriamente tendremos que declarar el nombre del servidor, con ServerName, y el sitio en el que se encuentran alojados los archivos, con DocumentRoot. Adicionalmente podemos declarar alias para referirnos a más de un nombre, con la directiva ServerAlias. Yo tengo dos páginas de ejemplo, www.ejemplo1.com y www.ejemplo2.com, para las que he creado un archivo de configuración a partir de 000-default.conf. En él he usado todo lo explicado anteriormente para servir las dos páginas en una única IP, en este caso la 200.200.200.200:80. 
+Dentro de la directiva VirtualHost declararemos todo lo que sea necesario, aunque obligatoriamente tendremos que declarar el nombre del servidor, con ServerName, y el sitio en el que se encuentran alojados los archivos, con DocumentRoot. Adicionalmente podemos declarar alias para referirnos a más de un nombre, con la directiva ServerAlias. Yo he creado dos páginas de ejemplo, www.ejemplo1.com y www.ejemplo2.com, para las que he creado un archivo de configuración a partir de 000-default.conf. En él he usado todo lo explicado anteriormente para servir las dos páginas en una única IP, en este caso la 200.200.200.200:80. Podemos ver las líneas relevantes del archivo de configuración en la siguiente figura: 
 
 %  Imagen aquí. 
 
 Si tuvieramos una solicitud al servidor que no coincidiera con ningún host virtual especificado, iría a parar al que se encuentre en primer lugar dentro del archivo de configuración. En nuestro ejemplo, se correspondería con www.example1.com. 
 
-Para hacer que las IP's que demos a nuestras web realmente funcionen, tenemos que asignarlas como direcciones de nuestra máquina. La forma más sencilla de hacer esto es irnos al archivo /etc/hosts y añadirlas manualmente. Relativo a este ejemplo, he tenido que añadir las dos siguientes líneas en la zona para IPv4: 
+Para hacer que las IP's que demos a nuestras web realmente funcionen, tenemos que asignarlas como direcciones de nuestra máquina. La forma más sencilla de hacer esto es irnos al archivo /etc/hosts y añadirlas manualmente\footnote{Esto será necesario sea cual sea el tipo de almacenamiento compartido que elijamos.}. Relativo a este ejemplo, he tenido que añadir las dos siguientes líneas en la zona para IPv4: 
 
 200.200.200.200 www.example1.com\\
 200.200.200.200 www.example2.com
@@ -249,10 +247,16 @@ Que quedan junto a las direcciones del loopback y el localhost, que ya se encont
 
 \subsubsection{IP-based}
 
-Si queremos tener almacenamiento compartido basado en IP, la combinación IP-Puerto de cada host virtual debe ser diferente. Como se comenta en la documentación de Apache\footnote{\url{http://httpd.apache.org/docs/2.4/en/vhosts/ip-based.html}}, \textit{'en terminología del servidor HTTP Apache, usar una única IP con múltiples puertos TCP está considerado hosting virtual basado en IP.'} Esto puede entrar en conflicto con lo que habíamos dicho sobre IP-based y port-based, considerando la versión basada en puertos como parte de la versión basada en IP. Esto se queda a la interpretación de las compañías, que pueden considerarlo de una forma u otra. No obstante, la base teórica no cambia. 
+Pasamos ahora a la configuración necesaria para el alojamiento compartido basado en IP. En este caso, la combinación IP-Puerto de cada host virtual debe ser diferente. Como se comenta en la documentación de Apache\footnote{\url{http://httpd.apache.org/docs/2.4/en/vhosts/ip-based.html}}, \textit{'en terminología del servidor HTTP Apache, usar una única IP con múltiples puertos TCP está considerado hosting virtual basado en IP.'} Esto puede entrar en conflicto con lo anteriormente dicho sobre IP-based y port-based, considerando la versión basada en puertos como parte de la versión basada en IP. Esto se queda a la interpretación de las compañías, que pueden considerarlo de una forma u otra. No obstante, la base teórica no cambia. 
 
-A la hora de crear un archivo de configuración para tener un almacenamiento basado en IP, se crea una sección para cada host virtual con la directiva <VirtualHost>. Cada una de ellas llevará en su cabecera la combinación IP:Puerto correspondiente al host virtual que referencie. Dentro de la directiva declararemos todo lo que sea oportuno
+Debido a la necesidad de distintas IP's, tendremos que especificarlas en el archivo /etc/hosts mencionado anteriormente, de la misma forma. Yo he añadido una nueva IP para dos nuevas páginas, con las líneas:
 
+100.100.100.100 www.example3.com \\
+100.100.100.101 www.example4.com
+
+A la hora de crear un archivo de configuración para tener un almacenamiento basado en IP, se crea una sección para cada host virtual con la directiva <VirtualHost>. Cada una de ellas llevará en su cabecera la combinación IP:Puerto correspondiente al host virtual que referencie, a la que además Apache debe escuchar, por lo que utilizaremos la directiva Listen IP:Puerto. Dentro de la directiva para el host virtual declararemos todo lo que sea oportuno, como el directorio raíz y el nombre del servidor. Podemos ver un ejemplo a continuación: 
+
+% Imagen
 
 En caso de llegar una petición que no corresponda a ninguna de las IP's especificadas, tenemos distintas opciones. La primera es que todas estas solicitudes vayan a parar al host virtual especificado en el cuerpo del archivo de configuración de Apache. Esta página puede ser una página de bienvenida o de error, aunque se recomienda ofrecer información útil al usuario, dándole por ejemplo una lista de los enlaces simbólicos de las páginas almacenadas en el servidor. Esto queda ya a gusto del administrador. 
 
@@ -264,18 +268,76 @@ Aunque no es necesario, se recomienda utilizar un puerto en esta declaración. E
 
 \subsubsection{IP-based y Name-based combinados}
 
+Si queremos combinar las dos técnicas, debemos proporcionar un nombre a cada host virtual, como hacíamos para Name-based (usando la directiva NameVirtualHost y la IP correspondiente), y una vez hecho esto declarar todos los nombres que queremos dentro de una IP. 
+
+En todos los casos mencionados anteriormente hemos de habilitar el host virtual para poder visualizarlo. Esto podemos hacerlo con la orden a2ensite, que nos muestra los archivos de configuración disponibles, dándonos a elegir cual queremos habilitar. La orden a2dissite deshabilita los host activados.\footnote{Página de manual de a2ensite y a2dissite: \url{http://manpages.ubuntu.com/manpages/precise/man8/a2ensite.8.html}}
+
+Toda la información relativa a la parte de configuración ha sido consultada en las página web de Apache\footnote{\url{http://httpd.apache.org/docs/2.4/en/vhosts/}} y en los libros [4] y [5] indicados en la bibliografía. 
+
 \subsubsection{Conexiones seguras - SSL}
 
-RFC's para TLS (SNI) \url{https://tools.ietf.org/html/rfc6066}\\
-y SSL \url{https://tools.ietf.org/html/rfc6101}
+Para establecer una conexión segura utilizaremos el protocolo SSL [6], que se basa en el uso de certificados para la creación de una clave de encriptación. Normalmente nuestro servidor Apache soportará SSL, aunque tendremos que configurarlo propiamente para que las peticiones que permitan conexión segura la obtengan. Anteriormente mencionamos que el uso de la palabra \_default\_ podía ayudarnos a establecer esta configuración por defecto, pero puede que no queramos que esto sea siempre así, y permitir solo a algunos hosts o a una parte de estos el uso de conexión segura. Para ello deberemos usar distintas directivas, como pueden ser las siguientes:
 
-\section{Bibliografía}
+\begin{itemize}
+\item LoadModule ssl\_module - Para cargar el módulo SSL. 
+\item SSLEngine on - Para activar el uso de SSL (en la declaración de un host virtual). 
+\item SSLCertificateFile y SSLCertificateKeyFile para los archivos de certificados (dentro de la declaración del host virtual).
+\item Y un largo etcétera, para configurar distintos aspectos (p. ej. timeouts o semillas).
+\end{itemize}
+
+Sin embargo, nos encontramos con un problema fundamental, relativo al hosting basado en nombres. Nos gustaría poder tener distintos hosts SSL en una única IP, cosa que no es posible debido a cómo trabaja SSL, ya que únicamente permite un host seguro por cada combinación IP:Puerto. En otro caso, el acceso a una de estas IP's derivaría en mensajes de error dados por el navegador, pues estaría recibiendo un certificado erróneo si este no coincidiera con el de la página a la que intentamos acceder (que es lo que normalmente sucede). Esto ocurre debido a que cuando el navegador hace una petición SSL, lo primero en enviarse desde el servidor al navegador es el certificado, para inicial la encriptación SSL. Como esto ocurre antes de que el servidor sepa la URL a la que se está intentando acceder (el nombre del host), es imposible elegir un host virtual particular y mandar su certificado. Por lo tanto no se puede asociar más de un certificado a cada pareja IP:Puerto. 
+
+\textbf{Posibles soluciones}
+
+La solución más sencilla sería simplemente ignorar el problema; aunque haya un error de certificado, en realidad no está habiendo ningún fallo en la conexión, que podría continuar sin problemas si así se lo especificásemos al navegador. Al ocurrir esto, el navegador nos daría un mensaje parecido a este: \\
+\textit{'Ha intentado establecer una conexión con www.ejemplo1.com. Sin embargo, el certificado de seguridad presentado pertenece a www.ejemplo2.com. Es posible, aunque improbable, que alguien esté intentando interceptar su comunicación con esta página web. Si sospecha que el certificado mostrado no pertenece a www.ejemplo1.com, por favor, cancele la conexión y notifíqueselo al administrador del sitio.}\footnote{Traducción del inglés} 
+
+Si bien ignorar el problema puede ser útil en fases iniciales o de desarrollo, pues el flujo de peticiones se limitará a peticiones locales y muy pocas externas, es bastante poco útil en caso de que nuestra web tenga un cierto número de visitas, ya que no ofrece seguridad al usuario, el cual, al ver el mensaje que le presenta el navegador, probablemente cancele la conexión. 
+
+Otra opción es usar más de una IP o distintos puertos, pero esto entra en conflicto con la técnica utilizada; es lógico pensar que si hemos utilizado un almacenamiento basado en nombres, no disponemos de las suficientes direcciónes IP's para poder asignar una a cada web, aunque podría darse la posibilidad. En el caso de los puertos, dar un puerto distinto a cada web resultaría laborioso, pues al no ser un puerto por defecto para la conexión, el usuario tendría que especificarlo a la hora de acceder a la página. Sin embargo, esta opción es una buena alternativa si los accesos a la web van a realizarse mediante enlaces simbólicos desde otros lugares, evitando que el usuario tenga que especificar la dirección y puerto de nuestra web.
+
+Tenemos otra opción, que es la de los certificados comodín (wildcard), que nos permite tener un único certificado para múltiples sitios, evitando los problemas anteriormente mencionados. Es posible generar estos certificados, pero al no estar directamente relacionado con la materia no lo trataremos aquí. Considero que la generación de certificados en general es un tema de gran interés, pero no corresponde hablar de él en este trabajo, que está enfocado en otra dirección.
+
+Por último, la mejor opción que tenemos es el uso de Server Name Indication (SNI), una extensión del protocolo TLS\footnote{Propuesto en 2003 en el RFC 3546, actualmente obsoleto \url{http://tools.ietf.org/html/rfc3546}} que indica, en el proceso de \textit{handshaking}, el nombre del host al que el cliente está tratando de acceder. De esta forma permitimos que cada sitio tenga un certificado propio y no uno común para todos los que compartan IP, pues el servidor es capaz de elegir correctamente el que debe servir, solucionando el problema que se nos presentaba. Si bien SNI podía dar problemas si el navegador no lo soportaba y el servidor lo tenía configurado, en la actualidad prácticamente todos los navegadores lo incorporan. Apache soporta SNI desde su versión 2.2.12, con el módulo de SSL. \\
+Para ver más sobre SNI, consultar el último RFC de TLS [7].
+
+\textbf{Implementación en apache}
+
+Para usar SSL en un virtual host tendremos una configuración parecida a la siguiente: 
+
+<VirtualHost \_default\_:443>\\
+	SSLEngine On\\
+	SSLCertificateFile    \dots\\
+	SSLCertificateKeyFile \dots\\
+	\dots\\
+</VirtualHost> 
+
+La directiva Redirect puede sernos útil para redirigir conexiones seguras. 
+
+También podemos requerir conexión SSL para el acceso a ciertos lugares, con la directiva Directory (normalmente la ubicaremos dentro de la directiva VirtualHost). Podemos hacerlo como sigue:
+
+<Directory /www/secure>\\
+	SSLRequireSSL\\
+	\dots\\
+</Directory>
+
+Esto prohibe peticiones que no sean SSL al directorio indicado. 
+
+\section{Bibliografía. Sitios de interés.}
 
 [1] Centros de datos de Google - \url{http://www.google.com/about/datacenters/}
 
 [2] Evolución del almacenamiento web - \url{http://www.hansoninc.com/the-evolution-of-web-hosting/}
 
 [3] - Uso de servidores web - \url{http://news.netcraft.com/archives/2015/04/20/april-2015-web-server-survey.html\#more-18965}
+
+[4] - Ken Coar, Rich Bowen - Apache. Ed. Anaya. 
+
+[5] - Mohammed J. Kabir - Apache Server Bible. Ed. Anaya. 
+
+[6] - RFC 6101 - SSL \url{https://tools.ietf.org/html/rfc6101}
+
+[7] - RFC 6066 - TLS \url{https://tools.ietf.org/html/rfc6066}
 
 \section{Aparte. Ideas para la presentación. Preguntas.}
 \begin{itemize}
