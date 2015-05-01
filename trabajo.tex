@@ -186,17 +186,16 @@ En el desarrollo de este trabajo trabajaremos con Apache instalado en Ubuntu 14.
 \subsection{Configuración general de Apache}
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
-%La parte importante del trabajo. Virtual Hosting en Apache. Comentar que no se pueden hacer experimentos a gran escala pues conllevaría alquilar un servidor, crear una web y monitorizarla. 
-% https://www.digitalocean.com/community/tutorials/como-configurar-virtual-host-de-apache-en-ubuntu-14-04-lts-es
+% La parte importante del trabajo. Virtual Hosting en Apache. Comentar que no se pueden hacer experimentos a gran escala pues conllevaría alquilar un servidor, crear una web y monitorizarla. 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 
 En este apartado vamos a hablar de la configuración de Apache en Ubuntu, inicialmente de forma general y después centrada en la configuración necesaria para proporcionar un servicio de hosting virtual. 
 
 Una vez realizada la instalación de Apache, tendremos todo lo relacionado con el servidor web en el directorio /etc/apache2. Aquí será donde tengamos todos los archivos de configuración de Apache, como por ejemplo apache2.conf o ports.conf. Cada archivo es relativo a una característica del servidor, y deberemos modificarlos para obtener los resultados que buscamos. Como las modificaciones serán numerosas, indicaré en todo momento que archivo de configuración estoy modificando. 
 
-El archivo principal de configuración es apache2.conf. Aquí tendremos la configuración general del servidor: dónde tenemos el directorio raíz, qué archivos de configuración adicionales estamos utilizando (como podría ser el archivo de configuración de puertos), parámetros para la conexión, etc. 
+El archivo principal de configuración es apache2.conf. Aquí tendremos la configuración general del servidor: dónde tenemos el directorio raíz de Apache (por defecto /etc/apache2), qué archivos de configuración adicionales estamos utilizando (como podría ser el archivo de configuración de puertos), parámetros para la conexión, etc. Normalmente el directorio raíz será 
 
-Para la configuración de los puertos de escucha, tenemos un archivo inicial que es ports.conf. Su formato es muy sencillo, simplemente hemos de indicarle los puertos que queremos escuchar con la línea 'Listen X', donde X es el número de puerto. Por defecto se escucha al puerto 80, y si tenemos posibilidad de conexión segura mediante SSL se escucha también el puerto 443 (para conexiones HTTPS). Si quisiéramos añadir más puertos podemos hacerlo añadiendo manualmente la línea indicada anteriormente. 
+Para la configuración de los puertos de escucha, tenemos un archivo inicial que es ports.conf. Su formato es muy sencillo, simplemente hemos de indicarle los puertos que queremos escuchar con la línea 'Listen X', donde X es el número de puerto. Por defecto se escucha al puerto 80, y si tenemos posibilidad de conexión segura mediante SSL se escucha también el puerto 443 (para conexiones HTTPS). Si quisiéramos añadir más puertos podemos hacerlo añadiendo manualmente la línea indicada anteriormente. Para añadir otros archivos de configuración de puertos deberíamos irnos al archivo de configuración general apache2.conf y especificarlos ahí, utilizando la directiva Include (por ejemplo, Include ports.conf).
 
 \subsection{Configuración enfocada al hosting virtual}
 
@@ -217,7 +216,7 @@ La línea DocumentRoot nos indica el directorio raíz que almacenará los archiv
 
 \textbf{¿Qué hemos de hacer si queremos añadir nuevos hosts virtuales?}
 
-% http://askubuntu.com/questions/256013/could-not-reliably-determine-the-servers-fully-qualified-domain-name
+
 
 Cada host virtual que queramos añadir quedará determinado en el archivo de configuración 000-default.conf de la carpeta sites-enabled, que especifica las webs que estaremos utilizando. Por normal general, cada nuevo host que añadamos tendrá su configuración entre las líneas <VirtualHost IP:Port> y </VirtualHost>. Dicha configuración dependerá del tipo de hosting virtual que queramos (IP-based o Name-based), por lo que distinguiremos entre ambos casos y los analizaremos con profundidad. 
 
@@ -233,11 +232,35 @@ A partir de aquí, usaremos la directiva <VirtualHost> para declarar todos los h
 
 <VirtualHost 200.200.200.200:80>
 
-Dentro de la directiva VirtualHost declararemos todo lo que sea necesario, aunque obligatoriamente tendremos que declarar el nombre del servidor, con ServerName, y el sitio en el que se encuentran alojados los archivos, con DocumentRoot. Adicionalmente podemos declarar alias para referirnos a más de un nombre, con la directiva ServerAlias. 
+Dentro de la directiva VirtualHost declararemos todo lo que sea necesario, aunque obligatoriamente tendremos que declarar el nombre del servidor, con ServerName, y el sitio en el que se encuentran alojados los archivos, con DocumentRoot. Adicionalmente podemos declarar alias para referirnos a más de un nombre, con la directiva ServerAlias. Yo tengo dos páginas de ejemplo, www.ejemplo1.com y www.ejemplo2.com, para las que he creado un archivo de configuración a partir de 000-default.conf. En él he usado todo lo explicado anteriormente para servir las dos páginas en una única IP, en este caso la 200.200.200.200:80. 
+
+%  Imagen aquí. 
+
+Si tuvieramos una solicitud al servidor que no coincidiera con ningún host virtual especificado, iría a parar al que se encuentre en primer lugar dentro del archivo de configuración. En nuestro ejemplo, se correspondería con www.example1.com. 
+
+Para hacer que las IP's que demos a nuestras web realmente funcionen, tenemos que asignarlas como direcciones de nuestra máquina. La forma más sencilla de hacer esto es irnos al archivo /etc/hosts y añadirlas manualmente. Relativo a este ejemplo, he tenido que añadir las dos siguientes líneas en la zona para IPv4: 
+
+200.200.200.200 www.example1.com\\
+200.200.200.200 www.example2.com
+
+Que quedan junto a las direcciones del loopback y el localhost, que ya se encontraban en el archivo. 
+
+\underline{Importante:} Al añadir hosts virtuales no estamos añadiendo entradas al servidor DNS. Esta acción debe realizarse por separado dentro del servidor DNS, para que los nombres se vinculen a la IP del sistema. Como esto no abarca el tema del trabajo, no lo trataremos aquí, pero es conveniente saber que esto debe hacerse, pues en otro caso no se servirían nuestras webs al no estar referidas por el servidor DNS, ya que el usuario nunca podría llegar a ellas. 
 
 \subsubsection{IP-based}
 
-Si queremos tener almacenamiento compartido basado en IP, la combinación IP-Puerto de cada host virtual debe ser diferente. Como se comenta en la documentación de Apache\footnote{\url{http://httpd.apache.org/docs/2.4/en/vhosts/ip-based.html}}, \textit{'en terminología del servidor HTTP Apache, usar una única IP con múltiples puertos TCP está considerado hosting virtual basado en IP.'}
+Si queremos tener almacenamiento compartido basado en IP, la combinación IP-Puerto de cada host virtual debe ser diferente. Como se comenta en la documentación de Apache\footnote{\url{http://httpd.apache.org/docs/2.4/en/vhosts/ip-based.html}}, \textit{'en terminología del servidor HTTP Apache, usar una única IP con múltiples puertos TCP está considerado hosting virtual basado en IP.'} Esto puede entrar en conflicto con lo que habíamos dicho sobre IP-based y port-based, considerando la versión basada en puertos como parte de la versión basada en IP. Esto se queda a la interpretación de las compañías, que pueden considerarlo de una forma u otra. No obstante, la base teórica no cambia. 
+
+A la hora de crear un archivo de configuración para tener un almacenamiento basado en IP, se crea una sección para cada host virtual con la directiva <VirtualHost>. Cada una de ellas llevará en su cabecera la combinación IP:Puerto correspondiente al host virtual que referencie. Dentro de la directiva declararemos todo lo que sea oportuno
+
+
+En caso de llegar una petición que no corresponda a ninguna de las IP's especificadas, tenemos distintas opciones. La primera es que todas estas solicitudes vayan a parar al host virtual especificado en el cuerpo del archivo de configuración de Apache. Esta página puede ser una página de bienvenida o de error, aunque se recomienda ofrecer información útil al usuario, dándole por ejemplo una lista de los enlaces simbólicos de las páginas almacenadas en el servidor. Esto queda ya a gusto del administrador. 
+
+La segunda opción es crear un host virtual que recoja todas las peticiones por defecto. Esto lo haremos con la palabra reservada \_default\_, usandola en la declaración del host virtual como sigue: 
+
+<VirtualHost \_default\_:80> 
+
+Aunque no es necesario, se recomienda utilizar un puerto en esta declaración. Este uso es la forma más común de configurar y activar un protocolo SSL, utilizando el puerto 443 combinado con algunas opciones.  
 
 \subsubsection{IP-based y Name-based combinados}
 
@@ -258,6 +281,8 @@ y SSL \url{https://tools.ietf.org/html/rfc6101}
 \begin{itemize}
 \item Almacenamientos a lo largo de la historia. 
 \item Tipos de hosting virtual. Tanto para presentación como para preguntas. 
+\item Combinación de tipos de hosting virtual. 
+\item Archivos de configuración de Apache.
 \end{itemize}
 
 \end{document}
