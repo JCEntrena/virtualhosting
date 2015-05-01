@@ -222,7 +222,7 @@ Siempre será necesario conocer la nuestra IP para configurar los hosts virtuale
 
 \subsubsection{Name-based}
 
-Vamos a ver la configuración necesaria para poder servir distintos sitios web usando una política basada en nombre. En primer lugar, necesitaremos definir los hosts virtuales mediante el uso de la directiva NameVirtualHost, indicándole la IP que vamos a utilizar. Por ejemplo, si nuestra IP es 200.200.200.200, al principio del archivo de configuración tendremo que incluir la línea:
+Vamos a ver la configuración necesaria para poder servir distintos sitios web usando una política basada en nombre\footnote{Referencia principal: \url{http://httpd.apache.org/docs/2.4/en/vhosts/name-based.html}}. En primer lugar, necesitaremos definir los hosts virtuales mediante el uso de la directiva NameVirtualHost, indicándole la IP que vamos a utilizar. Por ejemplo, si nuestra IP es 200.200.200.200, al principio del archivo de configuración tendremo que incluir la línea:
 
 NameVirtualHost 200.200.200.200:80\footnote{El puerto 80 es un ejemplo del puerto a usar. Podemos configurar cualquier otro o permitirlos todos con *}
 
@@ -247,14 +247,14 @@ Que quedan junto a las direcciones del loopback y el localhost, que ya se encont
 
 \subsubsection{IP-based}
 
-Pasamos ahora a la configuración necesaria para el alojamiento compartido basado en IP. En este caso, la combinación IP-Puerto de cada host virtual debe ser diferente. Como se comenta en la documentación de Apache\footnote{\url{http://httpd.apache.org/docs/2.4/en/vhosts/ip-based.html}}, \textit{'en terminología del servidor HTTP Apache, usar una única IP con múltiples puertos TCP está considerado hosting virtual basado en IP.'} Esto puede entrar en conflicto con lo anteriormente dicho sobre IP-based y port-based, considerando la versión basada en puertos como parte de la versión basada en IP. Esto se queda a la interpretación de las compañías, que pueden considerarlo de una forma u otra. No obstante, la base teórica no cambia. 
+Pasamos ahora a la configuración necesaria para el alojamiento compartido basado en IP. En este caso, la combinación IP-Puerto de cada host virtual debe ser diferente. Como se comenta en la documentación de Apache\footnote{\url{http://httpd.apache.org/docs/2.4/en/vhosts/ip-based.html}\\También es la referencia principal de la sección.}, \textit{'en terminología del servidor HTTP Apache, usar una única IP con múltiples puertos TCP está considerado hosting virtual basado en IP.'} Esto puede entrar en conflicto con lo anteriormente dicho sobre IP-based y port-based, considerando la versión basada en puertos como parte de la versión basada en IP. Esto se queda a la interpretación de las compañías, que pueden considerarlo de una forma u otra. No obstante, la base teórica no cambia. 
 
 Debido a la necesidad de distintas IP's, tendremos que especificarlas en el archivo /etc/hosts mencionado anteriormente, de la misma forma. Yo he añadido una nueva IP para dos nuevas páginas, con las líneas:
 
 100.100.100.100 www.example3.com \\
 100.100.100.101 www.example4.com
 
-A la hora de crear un archivo de configuración para tener un almacenamiento basado en IP, se crea una sección para cada host virtual con la directiva <VirtualHost>. Cada una de ellas llevará en su cabecera la combinación IP:Puerto correspondiente al host virtual que referencie, a la que además Apache debe escuchar, por lo que utilizaremos la directiva Listen IP:Puerto. Dentro de la directiva para el host virtual declararemos todo lo que sea oportuno, como el directorio raíz y el nombre del servidor. Podemos ver un ejemplo a continuación: 
+A la hora de crear un archivo de configuración para tener un almacenamiento basado en IP, se crea una sección para cada host virtual con la directiva <VirtualHost>. Cada una de ellas llevará en su cabecera la combinación IP:Puerto correspondiente al host virtual que referencie, a la que además Apache debe escuchar, por lo que utilizaremos la directiva Listen IP:Puerto antes de declarar el host virtual. Dentro de la directiva para el host virtual declararemos todo lo que sea oportuno, como el directorio raíz y el nombre del servidor. Podemos ver un ejemplo a continuación: 
 
 % Imagen
 
@@ -268,7 +268,7 @@ Aunque no es necesario, se recomienda utilizar un puerto en esta declaración. E
 
 \subsubsection{IP-based y Name-based combinados}
 
-Si queremos combinar las dos técnicas, debemos proporcionar un nombre a cada host virtual, como hacíamos para Name-based (usando la directiva NameVirtualHost y la IP correspondiente), y una vez hecho esto declarar todos los nombres que queremos dentro de una IP. 
+Si queremos combinar las dos técnicas, debemos proporcionar un nombre a cada host virtual, como hacíamos para Name-based (usando la directiva NameVirtualHost y la IP correspondiente), y una vez hecho esto declarar todos los nombres que queremos dentro de una IP. Como ya hemos visto un ejemplo para cada caso, me abstengo de incluir otro pues sería redundante. No obstante, podemos ver un ejemplo en la página de Apache en este enlace \url{http://httpd.apache.org/docs/2.4/vhosts/examples.html}. 
 
 En todos los casos mencionados anteriormente hemos de habilitar el host virtual para poder visualizarlo. Esto podemos hacerlo con la orden a2ensite, que nos muestra los archivos de configuración disponibles, dándonos a elegir cual queremos habilitar. La orden a2dissite deshabilita los host activados.\footnote{Página de manual de a2ensite y a2dissite: \url{http://manpages.ubuntu.com/manpages/precise/man8/a2ensite.8.html}}
 
