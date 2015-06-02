@@ -188,7 +188,7 @@ En el desarrollo de este trabajo trabajaremos con Apache instalado en Ubuntu 14.
 % La parte importante del trabajo. Virtual Hosting en Apache. Comentar que no se pueden hacer experimentos a gran escala pues conllevaría alquilar un servidor, crear una web y monitorizarla. 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 
-En este apartado vamos a hablar de la configuración de Apache en Ubuntude forma general, mientras que en el siguiente apartado nos centraremos en la configuración necesaria para proporcionar un servicio de hosting virtual. 
+En este apartado vamos a hablar de la configuración de Apache en Ubuntu de forma general, mientras que en el siguiente apartado nos centraremos en la configuración necesaria para proporcionar un servicio de hosting virtual. 
 
 Una vez realizada la instalación de Apache, tendremos todo lo relacionado con el servidor web en el directorio /etc/apache2. Aquí será donde tengamos todos los archivos de configuración de Apache, como por ejemplo apache2.conf o ports.conf. Cada archivo es relativo a una característica del servidor, y deberemos modificarlos para obtener los resultados que buscamos. 
 
@@ -217,7 +217,7 @@ La línea DocumentRoot nos indica el directorio raíz que almacenará los archiv
 
 Cada host virtual que queramos añadir quedará determinado en el archivo de configuración 000-default.conf de la carpeta sites-enabled, que especifica las webs que estaremos utilizando. Por normal general, cada nuevo host que añadamos tendrá su configuración entre las líneas <VirtualHost IP:Port>\ y </VirtualHost>. Dicha configuración dependerá del tipo de hosting virtual que queramos (IP-based o Name-based), por lo que distinguiremos entre ambos casos y los analizaremos con detalle. 
 
-\underline{Importante:} Siempre será necesario conocer la nuestra IP para configurar los hosts virtuales en base a ella. 
+\underline{Importante:} Siempre será necesario conocer nuestra IP para configurar los hosts virtuales en base a ella. 
 
 \subsubsection{Name-based}
 
@@ -298,7 +298,7 @@ Para establecer una conexión segura utilizaremos el protocolo SSL [6], que se b
 \item Y un largo etcétera, para configurar distintos aspectos (p. ej. timeouts o semillas).
 \end{itemize}
 
-Sin embargo, nos encontramos con un problema fundamental, relativo al hosting basado en nombres. Nos gustaría poder tener distintos hosts SSL en una única IP, cosa que no es posible debido a cómo trabaja SSL, ya que únicamente permite un host seguro por cada combinación IP:Puerto. En otro caso, el acceso a una de estas IP's derivaría en mensajes de error dados por el navegador, pues estaría recibiendo un certificado erróneo si este no coincidiera con el de la página a la que intentamos acceder (que es lo que normalmente sucede). Esto ocurre debido a que cuando el navegador hace una petición SSL, lo primero en enviarse desde el servidor al navegador es el certificado, para inicial la encriptación SSL. Como esto ocurre antes de que el servidor sepa la URL a la que se está intentando acceder (el nombre del host), es imposible elegir un host virtual particular y mandar su certificado. Por lo tanto no se puede asociar más de un certificado a cada pareja IP:Puerto. 
+Sin embargo, nos encontramos con un problema fundamental, relativo al hosting basado en nombres. Nos gustaría poder tener distintos hosts SSL en una única IP, cosa que no es posible debido a cómo trabaja SSL, ya que únicamente permite un host seguro por cada combinación IP:Puerto. En otro caso, el acceso a una de estas IP's derivaría en mensajes de error dados por el navegador, pues estaría recibiendo un certificado erróneo si este no coincidiera con el de la página a la que intentamos acceder (que es lo que normalmente sucede). Esto ocurre debido a que cuando el navegador hace una petición SSL, lo primero en enviarse desde el servidor al navegador es el certificado, para iniciar la encriptación SSL. Como esto ocurre antes de que el servidor sepa la URL a la que se está intentando acceder (el nombre del host), es imposible elegir un host virtual particular y mandar su certificado. Por lo tanto no se puede asociar más de un certificado a cada pareja IP:Puerto. 
 
 \textbf{Posibles soluciones}
 
